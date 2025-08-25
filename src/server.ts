@@ -1,12 +1,21 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import { PORT } from "./config/env";
 import helloRoutes from "./routes/helloRoutes";
 import { logger } from "./middlewares/logEvents";
+import connectDB from "./config/dbConn";
+import mongoose from "mongoose";
 const app = express();
+
+connectDB();
+
+app.use(urlencoded({ extended: false }));
 
 app.use(logger);
 app.use("/", helloRoutes);
 
-app.listen(PORT, () =>
-  console.log(`server running on port http://localhost:${PORT}`)
-);
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () =>
+    console.log(`server running on port http://localhost:${PORT}`)
+  );
+});
