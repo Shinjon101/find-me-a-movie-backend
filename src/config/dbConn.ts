@@ -3,7 +3,9 @@ import { MONGO_URI } from "./env";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGO_URI, {
+      dbName: "MoviesDatabase",
+    });
   } catch (err) {
     console.log(err);
   }
