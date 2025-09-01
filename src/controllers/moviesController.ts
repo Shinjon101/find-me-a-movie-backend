@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Movie } from "../models/Movie";
 
-export const getPopMovie = async (req: Request, res: Response) => {
+export const getMovies = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
@@ -35,6 +35,23 @@ export const getPopMovie = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error fetching movie:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getMovie = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const movie = await Movie.findById(id);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.json(movie);
+  } catch (error) {
+    console.error("Error fetching movie by ID:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
