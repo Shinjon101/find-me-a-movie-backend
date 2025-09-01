@@ -5,10 +5,15 @@ import moviesRoutes from "./routes/moviesRoutes";
 import { logger } from "./middlewares/logEvents";
 import connectDB from "./config/dbConn";
 import mongoose from "mongoose";
+import cors from "cors";
 import errorHandler from "./middlewares/errorHandler";
+import corsOptions from "./config/corsConfig";
 const app = express();
 
 connectDB();
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
