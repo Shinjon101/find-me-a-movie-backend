@@ -9,12 +9,14 @@ import cors from "cors";
 import errorHandler from "./middlewares/errorHandler";
 import corsOptions from "./config/corsConfig";
 import { apiKeyAuth } from "./middlewares/apiKeyAuth";
+import rateLimit from "express-rate-limit";
 const app = express();
 
 connectDB();
 
 app.use(apiKeyAuth);
 app.use(cors(corsOptions));
+app.use(rateLimit);
 
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
