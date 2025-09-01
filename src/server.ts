@@ -10,10 +10,12 @@ import errorHandler from "./middlewares/errorHandler";
 import corsOptions from "./config/corsConfig";
 import { apiKeyAuth } from "./middlewares/apiKeyAuth";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 const app = express();
 
 connectDB();
 
+app.use(helmet());
 app.use(apiKeyAuth);
 app.use(cors(corsOptions));
 app.use(rateLimit);
