@@ -8,10 +8,12 @@ import mongoose from "mongoose";
 import cors from "cors";
 import errorHandler from "./middlewares/errorHandler";
 import corsOptions from "./config/corsConfig";
+import { apiKeyAuth } from "./middlewares/apiKeyAuth";
 const app = express();
 
 connectDB();
 
+app.use(apiKeyAuth);
 app.use(cors(corsOptions));
 
 app.use(express.json());
