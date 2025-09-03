@@ -14,11 +14,10 @@ import helmet from "helmet";
 const app = express();
 
 connectDB();
-
+//app.use(rateLimit);
 app.use(helmet());
-app.use(apiKeyAuth);
+//app.use(apiKeyAuth);
 app.use(cors(corsOptions));
-app.use(rateLimit);
 
 app.use(express.json());
 app.use(urlencoded({ extended: false }));

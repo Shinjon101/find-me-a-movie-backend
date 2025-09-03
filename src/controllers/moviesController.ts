@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Movie } from "../models/Movie";
+import mapGenres from "../utils/mapGenres";
 
 export const getMovies = async (req: Request, res: Response) => {
   try {
@@ -28,9 +29,14 @@ export const getMovies = async (req: Request, res: Response) => {
       .skip((page - 1) * limit)
       .limit(limit);
 
+    const moviesWithGenres = movies.map((m) => ({
+      ...m.toObject(),
+      genres: mapGenres(m.genres),
+    }));
+
     return res.json({
       page,
-      results: movies,
+      results: moviesWithGenres,
       total_pages: Math.ceil(totalResults / limit),
     });
   } catch (error) {
@@ -48,8 +54,10 @@ export const getMovie = async (req: Request, res: Response) => {
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
     }
-
-    res.json(movie);
+    return res.json({
+      ...movie,
+      genres: mapGenres(movie.genres),
+    });
   } catch (error) {
     console.error("Error fetching movie by ID:", error);
     res.status(500).json({ message: "Server error" });
