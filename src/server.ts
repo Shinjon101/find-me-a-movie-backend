@@ -25,9 +25,17 @@ app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
 app.use(logger);
+
 app.use("/", helloRoutes);
 app.use("/api/movies", moviesRoutes);
 app.use("/api/genres", genreRoutes);
+
+app.all(/.*/, (req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  (error as any).statusCode = 404;
+  next(error);
+});
+
 app.use(errorHandler);
 
 mongoose.connection.once("open", () => {

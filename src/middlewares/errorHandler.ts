@@ -2,7 +2,10 @@ import { logEvents } from "./logEvents";
 
 const errorHandler = (err, req, res, next) => {
   logEvents(`${err.name}: ${err.message}`, "errLog.txt");
-  console.error(err.stack);
+
+  if (process.env.NODE_ENV !== "production") {
+    console.error(err.stack);
+  }
 
   const status = err.statusCode || 500;
   const message = status === 500 ? "Internal Server Error" : err.message;
