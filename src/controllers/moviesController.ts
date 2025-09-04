@@ -6,17 +6,16 @@ export const getMovies = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
-    const sortBy = (req.query.sort_by as string) || "popularity_and_vote";
+    const sortBy = req.query.sort_by as string;
     const query = (req.query.query as string) || "";
 
     const sortOptions: Record<string, any> = {
       popularity: { popularity: -1 },
       release_date: { release_date: -1 },
       vote_average: { vote_average: -1 },
-      popularity_and_vote: { popularity: -1, vote_average: -1 },
     };
 
-    const sort = sortOptions[sortBy] || sortOptions["popularity_and_vote"];
+    const sort = sortOptions[sortBy] || sortOptions["popularity"];
 
     const searchCondition = query
       ? { title: { $regex: query, $options: "i" } }
@@ -55,7 +54,7 @@ export const getMovie = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Movie not found" });
     }
     return res.json({
-      ...movie,
+      ...movie.toObject(),
       genres: mapGenres(movie.genres),
     });
   } catch (error) {

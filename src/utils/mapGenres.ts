@@ -1,6 +1,6 @@
 import { GENRES } from "../data/genres";
 
-const mapGenres = (genreString: string | undefined) => {
+const mapGenres = (genreString: string | undefined | null) => {
   if (!genreString) return [];
   const names = genreString.split(",").map((g) => g.trim());
   return GENRES.filter((g) => names.includes(g.name));

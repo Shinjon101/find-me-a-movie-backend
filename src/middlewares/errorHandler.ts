@@ -1,6 +1,14 @@
+import { Request, Response, NextFunction } from "express";
 import { logEvents } from "./logEvents";
 
-const errorHandler = (err, req, res, next) => {
+type AppError = Error & { statusCode?: number };
+
+const errorHandler = (
+  err: AppError,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   logEvents(`${err.name}: ${err.message}`, "errLog.txt");
 
   if (process.env.NODE_ENV !== "production") {
