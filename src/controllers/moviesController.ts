@@ -7,7 +7,8 @@ export const getMovies = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const sortBy = req.query.sort_by as string;
-    const query = (req.query.query as string) || "";
+    const search = (req.query.search as string) || "";
+    const genre = (req.query.with_genres as string) || "";
 
     const sortOptions: Record<string, any> = {
       popularity: { popularity: -1 },
@@ -17,10 +18,18 @@ export const getMovies = async (req: Request, res: Response) => {
 
     const sort = sortOptions[sortBy] || sortOptions["popularity"];
 
-    const searchCondition = query
-      ? { title: { $regex: query, $options: "i" } }
-      : {};
+    const searchCondition: any = {
+      budget: { $gt: 0 },
+      vote_count: { $gt: 15 },
+    };
 
+    if (search) {
+      searchCondition.title = { $regex: search, $options: "i" };
+    }
+
+    if (genre) {
+      searchCondition.genres = { $regex: genre, $options: "i" };
+    }
     const totalResults = await Movie.countDocuments(searchCondition);
 
     const movies = await Movie.find(searchCondition)
@@ -48,17 +57,19 @@ export const getMovie = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const movie = await Movie.findById(id);
+    // TMDB id is stored in the "id" field in your Movie documents
+    const movie = await Movie.findOne({ id: parseInt(id, 10) });
 
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
     }
+
     return res.json({
       ...movie.toObject(),
       genres: mapGenres(movie.genres),
     });
   } catch (error) {
-    console.error("Error fetching movie by ID:", error);
+    console.error("Error fetching movie by TMDB ID:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

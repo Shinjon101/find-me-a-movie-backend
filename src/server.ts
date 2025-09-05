@@ -19,11 +19,10 @@ import helmet from "helmet";
 const app = express();
 
 connectDB();
-
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(apiKeyAuth);
 app.use(limiter);
-app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(urlencoded({ extended: false }));

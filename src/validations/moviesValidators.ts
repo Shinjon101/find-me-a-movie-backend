@@ -20,11 +20,9 @@ export const getMoviesSchema = z.object({
     .optional()
     .default("popularity"),
 
-  query: z.string().optional().default(""),
+  search: z.string().optional().default(""),
 });
 
 export const getMovieSchema = z.object({
-  id: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
-    message: "Invalid movie ID",
-  }),
+  id: z.string().regex(/^\d+$/, { message: "Movie ID must be a number" }),
 });
