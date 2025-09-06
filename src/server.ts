@@ -3,10 +3,7 @@ import { PORT } from "./config/env";
 import helloRoutes from "./routes/helloRoutes";
 import moviesRoutes from "./routes/moviesRoutes";
 import genreRoutes from "./routes/genreRoutes";
-import {
-  validateGetMovie,
-  validateGetMovies,
-} from "./middlewares/validateMovieQueries";
+import { validateGetMovies } from "./middlewares/validateMovieQueries";
 import { logger } from "./middlewares/logEvents";
 import connectDB from "./config/dbConn";
 import mongoose from "mongoose";
@@ -31,6 +28,7 @@ app.use(logger);
 
 app.use("/", helloRoutes);
 app.use("/api/movies", validateGetMovies, moviesRoutes);
+app.use("/api/genres", genreRoutes);
 
 app.all(/.*/, (req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
