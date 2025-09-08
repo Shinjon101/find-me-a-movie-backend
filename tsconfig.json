@@ -2,8 +2,10 @@
     "compilerOptions": {
       "module": "NodeNext",
       "moduleResolution": "NodeNext",
+      "esModuleInterop": true,
       "sourceMap": true,
       "outDir": "dist",
+      "rootDir": "src"
     },
     "include": ["src/**/*"],
   }
