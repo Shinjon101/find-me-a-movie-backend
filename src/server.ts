@@ -3,6 +3,7 @@ import { PORT } from "./config/env";
 import helloRoutes from "./routes/helloRoutes";
 import moviesRoutes from "./routes/moviesRoutes";
 import genreRoutes from "./routes/genreRoutes";
+import healthRoutes from "./routes/healthRoutes";
 import { validateGetMovies } from "./middlewares/validateMovieQueries";
 import { logger } from "./middlewares/logEvents";
 import connectDB from "./config/dbConn";
@@ -13,20 +14,24 @@ import corsOptions from "./config/corsConfig";
 import { apiKeyAuth } from "./middlewares/apiKeyAuth";
 import { limiter } from "./middlewares/rateLimiter";
 import helmet from "helmet";
+
 const app = express();
 
 connectDB();
+
 app.use(cors(corsOptions));
 app.use(helmet());
-app.use(apiKeyAuth);
+
 app.use(limiter);
+app.use(logger);
 
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
-app.use(logger);
-
 app.use("/", helloRoutes);
+app.use("/", healthRoutes);
+
+app.use(apiKeyAuth);
 app.use("/api/movies", validateGetMovies, moviesRoutes);
 app.use("/api/genres", genreRoutes);
 
