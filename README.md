@@ -213,3 +213,7 @@ npm start
 ```
 
 - Add .env.production.local (with CLIENT_URL= < deployed frontend url >)
+
+
+## Author
+Built by Shinjon — open to feedback and contributions.
