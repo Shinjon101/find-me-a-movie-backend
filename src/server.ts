@@ -6,8 +6,7 @@ import genreRoutes from "./routes/genreRoutes";
 import healthRoutes from "./routes/healthRoutes";
 import { validateGetMovies } from "./middlewares/validateMovieQueries";
 import { logger } from "./middlewares/logEvents";
-import connectDB from "./config/dbConn";
-import mongoose from "mongoose";
+import { connectDB } from "./config/dbConn";
 import cors from "cors";
 import errorHandler from "./middlewares/errorHandler";
 import corsOptions from "./config/corsConfig";
@@ -17,8 +16,7 @@ import helmet from "helmet";
 
 const app = express();
 
-connectDB();
-
+// Middleware
 app.use(cors(corsOptions));
 app.use(helmet());
 
@@ -28,6 +26,7 @@ app.use(logger);
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
+// Routes
 app.use("/", helloRoutes);
 app.use("/", healthRoutes);
 
@@ -43,9 +42,16 @@ app.all(/.*/, (req, res, next) => {
 
 app.use(errorHandler);
 
-mongoose.connection.once("open", () => {
-  console.log("Connected to MongoDB");
-  app.listen(PORT, () =>
-    console.log(`server running on port http://localhost:${PORT}`)
-  );
-});
+connectDB()
+  .then(() => {
+    console.log("Connected to MongoDB");
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://0.0.0.0:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Failed to connect to MongoDB");
+    console.error(err);
+    process.exit(1); // required for Render to show error logs
+  });
