@@ -8,6 +8,11 @@ export const MONGO_URI = process.env.MONGO_URI;
 export const API_ACCESS_KEY = process.env.API_ACCESS_KEY;
 export const CLIENT_URL = process.env.CLIENT_URL;
 
-if (!MONGO_URI) {
-  throw new Error("MONGO_URI is missing!");
+if (process.env.NODE_ENV !== "test") {
+  if (!MONGO_URI) {
+    throw new Error("MONGO_URI is missing!");
+  }
+  if (!API_ACCESS_KEY) {
+    throw new Error("API_ACCESS_KEY is missing!");
+  }
 }

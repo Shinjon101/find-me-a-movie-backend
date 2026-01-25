@@ -5,4 +5,5 @@ export default {
   testMatch: ["**/*.test.ts", "**/*.spec.ts"],
   moduleFileExtensions: ["ts", "js", "json", "node"],
   clearMocks: true,
+  setupFiles: ["<rootDir>/jest.setup.ts"],
 };

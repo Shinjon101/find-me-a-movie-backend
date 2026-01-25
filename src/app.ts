@@ -20,8 +20,12 @@ const app = express();
 // Global middleware
 app.use(cors(corsOptions));
 app.use(helmet());
-app.use(limiter);
-app.use(logger);
+
+if (process.env.NODE_ENV !== "test") {
+  app.use(limiter);
+  app.use(logger);
+}
+
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 

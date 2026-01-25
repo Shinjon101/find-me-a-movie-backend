@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "test:watch":"jest --watch",
+    "test:watch": "jest --watch",
     "dev": "nodemon --loader ts-node/esm ./src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc"
@@ -19,6 +19,7 @@
     "@types/uuid": "^10.0.0",
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
+    "supertest": "^7.2.2",
     "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
