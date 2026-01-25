@@ -1,6 +1,13 @@
 import { config } from "dotenv";
 
-config({ path: `.env.${process.env.NODE_ENV || "development"}.local` });
+config();
 
-export const { PORT, NODE_ENV, MONGO_URI, API_ACCESS_KEY, CLIENT_URL } =
-  process.env;
+export const PORT = Number(process.env.PORT) || 8080;
+export const NODE_ENV = process.env.NODE_ENV || "development";
+export const MONGO_URI = process.env.MONGO_URI;
+export const API_ACCESS_KEY = process.env.API_ACCESS_KEY;
+export const CLIENT_URL = process.env.CLIENT_URL;
+
+if (!MONGO_URI) {
+  throw new Error("MONGO_URI is missing!");
+}
