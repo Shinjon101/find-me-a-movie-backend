@@ -33,12 +33,12 @@ app.use(urlencoded({ extended: false }));
 app.use("/", helloRoutes);
 app.use("/", healthRoutes);
 
-// Protected routes
-app.use(apiKeyAuth);
+// Protect only API routes
+app.use("/api", apiKeyAuth);
 app.use("/api/movies", validateGetMovies, moviesRoutes);
 app.use("/api/genres", genreRoutes);
 
-// 404
+// 404 handler
 app.all(/.*/, (req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
   (error as any).statusCode = 404;
