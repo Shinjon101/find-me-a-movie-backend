@@ -3,36 +3,20 @@ import { Movie } from "../../models/Movie";
 export const seedMovies = async () => {
   await Movie.deleteMany({});
 
-  return Movie.insertMany([
-    {
-      id: 1,
-      title: "The Avengers",
-      genres: "Action,Adventure",
-      popularity: 100,
-      vote_average: 8,
-      vote_count: 200,
-      budget: 220000000,
-      release_date: new Date("2012-01-01"),
-    },
-    {
-      id: 2,
-      title: "Avengers: Age of Ultron",
+  const movies = [];
+
+  for (let i = 1; i <= 15; i++) {
+    movies.push({
+      id: i,
+      title: `Movie ${i}`,
       genres: "Action",
-      popularity: 80,
-      vote_average: 7,
-      vote_count: 150,
-      budget: 250000000,
-      release_date: new Date("2015-01-01"),
-    },
-    {
-      id: 3,
-      title: "Comedy Movie",
-      genres: "Comedy",
-      popularity: 10,
-      vote_average: 6,
-      vote_count: 30,
-      budget: 5000000,
-      release_date: new Date("2010-01-01"),
-    },
-  ]);
+      popularity: 100 - i, // descending
+      vote_average: 5 + (i % 5), // rotating values
+      vote_count: 100 + i, // pass filter
+      budget: 1000000 + i,
+      release_date: new Date(2010 + i, 0, 1),
+    });
+  }
+
+  return Movie.insertMany(movies);
 };

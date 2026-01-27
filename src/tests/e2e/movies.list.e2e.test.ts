@@ -28,4 +28,35 @@ describe("GET /api/movies", () => {
     expect(movie).toHaveProperty("genres");
     expect(Array.isArray(movie.genres)).toBe(true);
   });
+
+  it("returns first page with limit", async () => {
+    const res = await request(app)
+      .get("/api/movies")
+      .query({
+        page: 1,
+        limit: 5,
+      })
+      .set("x-api-key", process.env.API_ACCESS_KEY as string);
+
+    expect(res.status).toBe(200);
+    expect(res.body.page).toBe(1);
+    expect(res.body.results.length).toBe(5);
+  });
+
+  it("returns second page with different results", async () => {
+    const page1 = await request(app)
+      .get("/api/movies")
+      .query({ page: 1, limit: 5 })
+      .set("x-api-key", process.env.API_ACCESS_KEY as string);
+
+    const page2 = await request(app)
+      .get("/api/movies")
+      .query({ page: 2, limit: 5 })
+      .set("x-api-key", process.env.API_ACCESS_KEY as string);
+
+    const firstPageIds = page1.body.results.map((m: any) => m.id);
+    const secondPageIds = page2.body.results.map((m: any) => m.id);
+
+    expect(firstPageIds).not.toEqual(secondPageIds);
+  });
 });
