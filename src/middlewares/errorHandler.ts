@@ -7,12 +7,13 @@ const errorHandler = (
   err: AppError,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  logEvents(`${err.name}: ${err.message}`, "errLog.txt");
-
-  if (process.env.NODE_ENV !== "production") {
-    console.error(err.stack);
+  if (process.env.NODE_ENV !== "test") {
+    logEvents(`${err.name}: ${err.message}`, "errLog.txt");
+    if (process.env.NODE_ENV !== "production") {
+      console.error(err.stack);
+    }
   }
 
   const status = err.statusCode || 500;

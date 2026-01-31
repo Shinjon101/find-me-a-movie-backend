@@ -21,6 +21,10 @@ jobs:
         run: npm ci
 
       - name: Run tests
+        env:
+          NODE_ENV: test
+          API_ACCESS_KEY: ${{ secrets.API_ACCESS_KEY }}
+          CLIENT_URL: http://localhost:5173
         run: npm test
 
       - name: Build project
